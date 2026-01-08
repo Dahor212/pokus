@@ -1,30 +1,24 @@
-/* SplitTimer PWA - iPhone-first (v26 UI polish + mockup C graphics) */
+/* SplitTimer PWA - iPhone-first (v27) */
 
-/* ====== GLOBAL RESET ====== */
+/* ====== RESET ====== */
 *{ box-sizing:border-box; }
 
 :root{
-  /* Apple Fitness-ish dark */
   --accent:#3b82f6;
   --accent2:#60a5fa;
+
   --bg:#0b0f17;
-  --surface:#0f1626;
-  --card:#121a2c;
-  --card2:#0f172a;
   --text:#e5e7eb;
   --muted:#9ca3af;
   --muted2:#6b7280;
+
   --danger:#ef4444;
 
-  --shadow: 0 12px 28px rgba(0,0,0,.45);
-  --shadowSoft: 0 10px 24px rgba(0,0,0,.35);
   --radius:18px;
   --radiusSm:14px;
 
   --pad:16px;
   --gap:14px;
-
-  --tap: rgba(255,255,255,.08);
 }
 
 html, body{
@@ -36,19 +30,20 @@ html, body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;
 }
 
-/* ====== APP CONTAINER (BACKGROUND GOES HERE) ====== */
+/* ====== APP WRAP (BACKGROUND MUST BE HERE) ====== */
 #app{
   min-height:100dvh;
   display:flex;
   flex-direction:column;
 
-  /* 🌥 CLOUD BACKGROUND (mockup C) */
+  /* ✅ Background image (your real filename) */
   background:
-    linear-gradient(180deg, rgba(10,14,24,.55), rgba(10,14,24,.88)),
+    linear-gradient(180deg, rgba(10,14,24,.50), rgba(10,14,24,.88)),
     url("bg-clouds.png") center top / cover no-repeat;
 
-  background-attachment: fixed;
-  overflow:hidden; /* prevents weird iOS text/fallback artifacts */
+  /* iOS quirks */
+  background-attachment: scroll;
+  overflow:hidden;
 }
 
 /* ====== TOPBAR ====== */
@@ -57,10 +52,9 @@ html, body{
   top:0;
   z-index:10;
 
-  /* fallback if custom vars missing */
   background: linear-gradient(180deg, rgba(17,49,86,.92), rgba(10,28,52,.88));
-
   color:#fff;
+
   padding: calc(10px + env(safe-area-inset-top)) 12px 10px 12px;
   display:flex;
   align-items:center;
@@ -88,24 +82,101 @@ html, body{
 .icon-btn{
   width:44px;
   height:44px;
-  border:0;
+  border:1px solid rgba(255,255,255,.10);
   border-radius:12px;
   background: rgba(255,255,255,.06);
   color:#fff;
   display:grid;
   place-items:center;
-  border:1px solid rgba(255,255,255,.10);
   box-shadow: 0 10px 30px rgba(0,0,0,.22);
 }
 
 .icon-btn svg{ width:22px; height:22px; }
 
 /* ====== LAYOUT ====== */
-.screen{ flex:1; overflow:hidden; }
+.screen{ flex:1; }
 .pad{ padding:16px; }
-.grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
 
-/* Keep cards consistent: not edge-to-edge, slight gap between them */
+.row{ display:flex; align-items:center; }
+.between{ justify-content:space-between; }
+.gap{ gap:10px; }
+
+.grid2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+}
+
+/* ====== UNIVERSAL BUTTON BASE ====== */
+button{
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  font-weight: 900;
+  border-radius: 18px;
+  height: 52px;
+
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+button:disabled{ opacity:.5; }
+
+.wide{ width:100%; }
+
+/* ====== PRIMARY / GHOST ====== */
+.primary{
+  appearance:none;
+  border: 1px solid rgba(255,255,255,.18);
+  background: linear-gradient(180deg, rgba(96,166,255,.98), rgba(39,112,255,.92));
+  color: rgba(255,255,255,.98);
+  text-shadow: 0 2px 12px rgba(0,0,0,.45);
+  font-weight:1000;
+  border-radius: 18px;
+  padding: 14px 16px;
+  min-height: 52px;
+  box-shadow: 0 16px 40px rgba(74,144,255,.25);
+}
+.primary:active{ transform: translateY(1px) scale(.99); }
+
+.ghost{
+  appearance:none;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  font-weight:1000;
+  border-radius: 18px;
+  padding: 14px 16px;
+  min-height: 52px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 30px rgba(0,0,0,.30);
+}
+.ghost:active{ transform: translateY(1px) scale(.99); }
+
+.dark{
+  background: rgba(255,255,255,.10);
+  color:#fff;
+}
+
+.plus{ font-size:18px; margin-right:6px; }
+
+/* ====== PILL ====== */
+.pill{
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.88);
+  padding:8px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size:12.5px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 10px 30px rgba(0,0,0,.35);
+}
+
+.pill.subtle{
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.10);
+  color: rgba(255,255,255,.82);
+}
+
+/* ====== CARD SYSTEM (FIX: spacing + not edge-to-edge) ====== */
 .card{
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
   border: 1px solid rgba(255,255,255,.14);
@@ -114,8 +185,10 @@ html, body{
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
+  /* ✅ NOT edge-to-edge */
   margin-left: 16px;
   margin-right: 16px;
+
   overflow:hidden;
 }
 
@@ -131,10 +204,83 @@ html, body{
   line-height:1.35;
 }
 
-/* (You had hints hidden; keep it like this) */
+/* (you had hints hidden - keep it) */
 .hint{ display:none !important; }
 
-/* ====== LISTS ====== */
+/* ====== SOURCE PICKER: make your existing buttons look like mockup cards ====== */
+/* (No HTML changes needed. Applies directly to #btnPickZwift and #btnPickKinomap) */
+#screenSource .grid2{
+  gap:14px;
+}
+
+#btnPickZwift,
+#btnPickKinomap{
+  height: 190px;
+  padding: 16px;
+  border-radius: 22px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:flex-start;
+
+  text-align:left;
+  font-size: 22px;
+  font-weight: 1000;
+
+  color:#fff;
+  text-shadow: 0 2px 14px rgba(0,0,0,.55);
+
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow: 0 18px 60px rgba(0,0,0,.55);
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position:relative;
+  overflow:hidden;
+}
+
+/* "Vybrat" chip top-left */
+#btnPickZwift::before,
+#btnPickKinomap::before{
+  content:"Vybrat";
+  position:absolute;
+  top:14px;
+  left:14px;
+
+  background:rgba(255,255,255,.22);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 900;
+  color:#fff;
+  text-shadow:none;
+}
+
+/* Backgrounds with dark gradient overlay */
+#btnPickZwift{
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.65)),
+    url("card-zwift.png");
+}
+#btnPickKinomap{
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.65)),
+    url("card-kinomap.png");
+}
+
+#btnPickZwift:active,
+#btnPickKinomap:active{
+  transform: translateY(1px) scale(.99);
+}
+
+/* ====== ROUTES LIST ====== */
 .list{
   padding: 0 14px 10px;
   display:flex;
@@ -162,142 +308,7 @@ html, body{
 .route-item .sub{ font-size:14px; color:rgba(255,255,255,.72); margin-top:4px; }
 .chev{ width:28px; height:28px; opacity:.6; }
 
-/* ====== BUTTONS (BASE) ====== */
-button{
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  font-weight: 900;
-  border-radius: 16px;
-  height: 52px;
-  border: 1px solid rgba(255,255,255,.12);
-}
-
-button:disabled{ opacity:.5; }
-
-.wide{ width:100%; }
-
-/* Primary button */
-.primary{
-  appearance:none;
-  border: 1px solid rgba(255,255,255,.18);
-  background: linear-gradient(180deg, rgba(96,166,255,.98), rgba(39,112,255,.92));
-  color: rgba(255,255,255,.98);
-  text-shadow: 0 2px 12px rgba(0,0,0,.45);
-  font-weight:1000;
-  border-radius: 18px;
-  padding: 14px 16px;
-  min-height: 52px;
-  box-shadow: 0 16px 40px rgba(74,144,255,.25);
-}
-
-.primary:active{
-  transform: translateY(1px) scale(.99);
-}
-
-/* Ghost button */
-.ghost{
-  appearance:none;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.08);
-  color: rgba(255,255,255,.92);
-  font-weight:1000;
-  border-radius: 18px;
-  padding: 14px 16px;
-  min-height: 52px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 30px rgba(0,0,0,.30);
-}
-
-.ghost:active{ transform: translateY(1px) scale(.99); }
-
-/* Dark button used for History */
-.dark{
-  background: rgba(255,255,255,.10);
-  color:#fff;
-}
-
-/* Plus sign in create route button */
-.plus{ font-size:18px; margin-right:6px; }
-
-/* ====== PILL ====== */
-.pill{
-  background: rgba(255,255,255,.10);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 10px 30px rgba(0,0,0,.35);
-  border: 1px solid rgba(255,255,255,.12);
-  color: rgba(255,255,255,.88);
-  padding:8px 12px;
-  border-radius: 999px;
-  font-weight: 900;
-  font-size:12.5px;
-}
-
-.pill.subtle{
-  background: rgba(255,255,255,.10);
-  border: 1px solid rgba(255,255,255,.10);
-  color: rgba(255,255,255,.82);
-}
-
-/* ====== SOURCE PICKER (MOCKUP CARDS) ====== */
-.source-grid{ gap:14px; }
-
-.source-card{
-  position:relative;
-  height:190px;
-  border-radius:22px;
-  border:1px solid rgba(255,255,255,.14);
-  overflow:hidden;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding:16px;
-
-  font-weight:1000;
-  color:#fff;
-  text-shadow:0 2px 12px rgba(0,0,0,.55);
-  box-shadow:0 18px 60px rgba(0,0,0,.55);
-}
-
-.source-card strong{ font-size:22px; }
-
-.source-label{
-  position:absolute;
-  top:14px;
-  left:14px;
-  background:rgba(255,255,255,.22);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius:999px;
-  padding:6px 12px;
-  font-size:13px;
-  font-weight:900;
-  border:1px solid rgba(255,255,255,.18);
-}
-
-/* Background images */
-.source-card.zwift{
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.65)),
-    url("card-zwift.png") center / cover no-repeat;
-}
-
-.source-card.kinomap{
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.65)),
-    url("card-kinomap.png") center / cover no-repeat;
-}
-
-.source-card:active{ transform: translateY(1px) scale(.99); }
-
-/* ====== PROFILE CANVAS ====== */
-#profileCanvas{
-  width:100%;
-  height:auto;
-  background:#f7f9fc;
-  border-radius: 12px;
-  display:block;
-}
-
-/* ====== ROUTE HEADER (DETAIL) ====== */
+/* ====== DETAIL ROUTE HEADER (not edge-to-edge, same as cards) ====== */
 .route-header{
   background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.12);
@@ -315,14 +326,12 @@ button:disabled{ opacity:.5; }
   font-weight: 900;
   letter-spacing: .2px;
 }
-
 .route-sub{
   margin-top: 6px;
   color: rgba(255,255,255,.72);
   font-weight: 800;
   font-size: 13px;
 }
-
 .route-best{
   margin-top: 10px;
   font-weight: 900;
@@ -330,45 +339,29 @@ button:disabled{ opacity:.5; }
   color: rgba(255,255,255,.92);
 }
 
-/* ====== LIST ITEMS (TOP5 / LAST3) ====== */
-.row{
-  display:flex;
-  align-items:center;
-}
-.between{ justify-content:space-between; }
-.gap{ gap:10px; }
-
-.rowitem{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding: 14px 14px;
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 16px 46px rgba(0,0,0,.45);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transform: translateY(0);
-  transition: transform .18s ease, border-color .18s ease, background .18s ease;
-  animation: fadeUp .22s ease both;
+/* ====== PROFILE CANVAS ====== */
+#profileCanvas{
+  width:100%;
+  height:auto;
+  background:#f7f9fc;
+  border-radius: 12px;
+  display:block;
 }
 
-.rowitem:active{ transform: translateY(1px); border-color: rgba(80,140,255,.35); }
-
-.rowitem .l .t{ font-weight: 900; font-size: 15px; }
-.rowitem .l .s{
-  margin-top: 3px;
-  font-weight: 800;
-  font-size: 12px;
-  color: rgba(255,255,255,.65);
-}
-.rowitem .r{
+/* ====== CHECKPOINTS BUTTON (+) ====== */
+.iconbtn{
+  width: 40px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.10);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 10px 30px rgba(0,0,0,.35);
+  color: rgba(255,255,255,.92);
   font-weight: 1000;
-  font-variant-numeric: tabular-nums;
-  font-size: 15px;
+  font-size: 18px;
+  line-height: 0;
 }
+.iconbtn:active{ transform: scale(.98); }
 
 /* ====== CHECKPOINT ROWS ====== */
 .cp-row{
@@ -402,21 +395,24 @@ button:disabled{ opacity:.5; }
   color: rgba(255,255,255,.92);
   font-weight:1000;
 }
-
 .cp-mini:disabled{ opacity:.35; }
 .cp-mini.danger{
   background: rgba(255,72,72,.18);
   border-color: rgba(255,72,72,.22);
 }
 
-/* ====== ICONS ====== */
-.difficon{ display:inline-flex; align-items:center; gap:8px; }
-.diffsvg{ width:18px; height:18px; vertical-align:-3px; filter:drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
-.medal{ display:inline-flex; align-items:center; gap:6px; }
-.ribbon{ width:16px; height:16px; vertical-align:-3px; filter:drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
+/* ====== TIMER ====== */
+.timer{
+  font-size: 72px;
+  font-weight: 1000;
+  letter-spacing: .02em;
+  text-align:center;
+  font-variant-numeric: tabular-nums;
+}
 
 /* ====== MODALS ====== */
 .modal{ position:fixed; inset:0; z-index:50; }
+
 .backdrop{
   position:absolute;
   inset:0;
@@ -452,7 +448,6 @@ button:disabled{ opacity:.5; }
   border: 1px solid rgba(255,255,255,.10);
 }
 .sheet-btn:active{ background: rgba(255,255,255,.11); }
-
 .sheet-btn.danger{ background:#ffe9ea; color:#a21c20; }
 .sheet-btn.file{ display:flex; justify-content:space-between; align-items:center; }
 .sheet-btn.file input{ display:none; }
@@ -478,25 +473,6 @@ button:disabled{ opacity:.5; }
 }
 
 .sep{ border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
-.mini{ font-size:14px; color: var(--text); font-weight:900; margin-bottom:10px; }
-
-/* ====== LEADERBOARD ====== */
-.leader-list{ display:flex; flex-direction:column; gap:10px; margin-top:10px; }
-.leader-item{
-  background: rgba(255,255,255,.10);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 10px 30px rgba(0,0,0,.35);
-  border-radius:14px;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.rank{ width:48px; color:var(--muted); font-weight:1000; }
-.leader-item .main{ display:flex; flex-direction:column; gap:4px; }
-.leader-item .main .d{ font-weight:900; }
-.leader-item .main .s{ font-size:12px; color:var(--muted); font-weight:800; }
-.leader-item .time{ margin-left:auto; font-weight:1000; font-variant-numeric: tabular-nums; }
 
 /* ====== TOAST ====== */
 .toast{
@@ -520,43 +496,13 @@ button:disabled{ opacity:.5; }
   opacity:.85;
 }
 
-/* ====== SEGMENT MODAL ====== */
-.seg-body{ display:flex; flex-direction:column; gap:14px; margin:10px 0; }
-.seg-card{
-  background: rgba(255,255,255,.10);
-  border-radius:16px;
-  padding:12px;
-  border:1px solid rgba(255,255,255,.10);
-}
-.seg-card .h{ font-weight:1000; margin-bottom:10px; }
-.seg-row{
-  display:flex;
-  align-items:baseline;
-  gap:10px;
-  padding:8px 0;
-  border-top:1px solid rgba(255,255,255,.10);
-}
-.seg-row:first-of-type{ border-top:0; }
-.seg-rank{ width:44px; color: var(--muted); font-weight:1000; }
-.seg-name{ flex:1; font-weight:900; }
-.seg-time{ font-weight:1000; font-variant-numeric: tabular-nums; }
-.seg-sub{ display:block; color: var(--muted); font-weight:800; font-size:12px; margin-top:2px; }
-
-/* ====== RIDE SCREEN (CONSISTENT TILE SPACING) ====== */
+/* ====== RIDE SCREEN (kept compatible with your HTML) ====== */
 #screenRide{
   padding-bottom: calc(24px + env(safe-area-inset-bottom));
 }
+.ride-tile{ margin: 14px 16px 0; border-radius: 20px; }
+.ride-tile + .ride-tile{ margin-top: 10px; }
 
-.ride-tile{
-  margin: 14px 16px;
-  border-radius: 20px;
-}
-
-.ride-tile + .ride-tile{
-  margin-top: 10px;
-}
-
-/* Ride header tile */
 .ride-route-title{ font-size: 24px; font-weight: 1000; letter-spacing: .2px; }
 .ride-route-meta{
   margin-top: 6px;
@@ -611,12 +557,6 @@ button:disabled{ opacity:.5; }
   color: rgba(96,166,255,.95);
 }
 .cp-dot2 span{ font-size: 12px; line-height: 1; }
-.ride-progress-text{
-  margin-top: 10px;
-  color: rgba(255,255,255,.65);
-  font-weight: 850;
-  font-size: 12px;
-}
 
 .ride-mini-profile-wrap{
   margin-top: 10px;
@@ -627,7 +567,6 @@ button:disabled{ opacity:.5; }
 }
 #rideMiniProfile{ width:100%; height: 92px; display:block; }
 
-/* Timer tile */
 .ride-timer{
   font-size: 66px;
   font-weight: 1000;
@@ -636,29 +575,33 @@ button:disabled{ opacity:.5; }
   font-variant-numeric: tabular-nums;
   margin: 2px 0 12px;
 }
+
 .ride-controls{
   display:grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
+
 .btn-primary, .btn-secondary{
   height: 60px;
   border-radius: 18px;
   font-weight: 1000;
   font-size: 18px;
 }
+
 .btn-primary{
   color: rgba(255,255,255,.98);
   background: linear-gradient(180deg, rgba(96,166,255,.98), rgba(39,112,255,.92));
   border: 1px solid rgba(120,180,255,.32);
 }
+
 .btn-secondary{
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.12);
   color: rgba(255,255,255,.92);
 }
 
-/* CTA inner layout for Start/Next/Finish */
+/* CTA inner layout (Start / Next / Finish + km) */
 #btnNextCheckpoint{
   display:flex;
   flex-direction:column;
@@ -686,22 +629,7 @@ button:disabled{ opacity:.5; }
 }
 #btnNextCheckpoint[data-mode="finish"] .btn-main{ font-size: 19px; }
 
-.primary.big{ min-height:62px; font-size:18px; letter-spacing:.2px; }
-.pulse{ animation: pulseGlow 1.4s ease-in-out infinite; }
-
-@keyframes pulseGlow{
-  0%,100%{ box-shadow:0 18px 60px rgba(0,0,0,.55), 0 0 0 rgba(80,140,255,0) }
-  50%{ box-shadow:0 18px 60px rgba(0,0,0,.55), 0 0 22px rgba(80,140,255,.35) }
-}
-
-@keyframes fadeUp{
-  from{ opacity:0; transform: translateY(6px) }
-  to{ opacity:1; transform: translateY(0) }
-}
-
-/* ====== RESPONSIVE (DESKTOP PREVIEW) ======
-   IMPORTANT: avoid centering causing "half cut" on mobile
-*/
+/* ====== FIX: avoid weird huge empty area / odd cropping on wider screens ====== */
 @media (min-width: 900px){
   body{
     display:grid;
@@ -714,4 +642,10 @@ button:disabled{ opacity:.5; }
     overflow:hidden;
     box-shadow: 0 18px 60px rgba(0,0,0,.25);
   }
+}
+
+/* ====== small animations ====== */
+@keyframes fadeUp{
+  from{ opacity:0; transform: translateY(6px) }
+  to{ opacity:1; transform: translateY(0) }
 }
