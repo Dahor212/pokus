@@ -45,7 +45,7 @@ html, body{
   /* 🌥 CLOUD BACKGROUND (mockup C) */
   background:
     linear-gradient(180deg, rgba(10,14,24,.55), rgba(10,14,24,.88)),
-    url("clouds-dark.webp") center top / cover no-repeat;
+    url("bg-clouds.png") center top / cover no-repeat;
 
   background-attachment: fixed;
   overflow:hidden; /* prevents weird iOS text/fallback artifacts */
@@ -277,13 +277,13 @@ button:disabled{ opacity:.5; }
 .source-card.zwift{
   background:
     linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.65)),
-    url("card-zwift.webp") center / cover no-repeat;
+    url("card-zwift.png") center / cover no-repeat;
 }
 
 .source-card.kinomap{
   background:
     linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.65)),
-    url("card-kinomap.webp") center / cover no-repeat;
+    url("card-kinomap.png") center / cover no-repeat;
 }
 
 .source-card:active{ transform: translateY(1px) scale(.99); }
